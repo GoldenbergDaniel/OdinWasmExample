@@ -15,6 +15,10 @@
 </style>
 
 <script>
+  /*
+  	wasm: the wasmMemoryInterface instance (WasmMemoryInterface)
+	  odin: the wasm instance                (WebAssembly.Instance)
+  */
   import { wasm, odin, WasmMemoryInterface } from "../wasm.js"
   
   let inputStr = ""
@@ -22,9 +26,13 @@
   function runOdin()
   {
     if (wasm && inputStr != "") {
+      // Allocate a string using provided allocator (note: length property only valid for ASCII strings)
       const strPtr = odin.exports.mem_alloc(inputStr.length)
       const strLen = wasm.storeString(strPtr, inputStr)
-      inputStr = wasm.loadString(odin.exports.do_string(strPtr, strLen), strLen)
+      // Get the resulting address and create JS string
+      const resAddr = odin.exports.do_string(strPtr, strLen)
+      inputStr = wasm.loadString(resAddr, strLen)
+      // Free the memory
       odin.exports.mem_clear()
     }
   }

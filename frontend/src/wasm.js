@@ -1,8 +1,17 @@
-import init from "./assets/test.wasm?init"
+// Import Wasm module using Vite's ?init feature
+import init from "./assets/main.wasm?init" 
 
+/*
+	wasm: the wasmMemoryInterface instance (WasmMemoryInterface)
+	odin: the wasm instance							   (WebAssembly.Instance)
+*/
 let wasm
 let odin
 
+/* 
+	Modified from https://github.com/odin-lang/Odin/blob/master/vendor/wasm/js/runtime.js
+	Use these functions to interface with Wasm's memory.
+*/
 class WasmMemoryInterface
 {
 	constructor() {
@@ -176,6 +185,9 @@ class WasmMemoryInterface
 	}
 }
 
+/*
+	Modified from https://github.com/odin-lang/Odin/blob/master/vendor/wasm/js/runtime.js
+*/
 function odinDefaultImports(wasmMemoryInterface, consoleElement, memory)
 {
 	const MAX_INFO_CONSOLE_LINES = 512;
@@ -655,15 +667,6 @@ function initWasm()
   init(imports).then((instance) => {
     odin = instance
     wasm.setExports(instance.exports)
-
-    if (instance.exports.memory) {
-      if (wasm.memory) {
-        console.warn("WASM given an interface with existing memory.")
-      }
-
-      wasm.setMemory(instance.exports.memory)
-    }
-
     console.log("Wasm initialized successfully.")
   })
 }

@@ -1,11 +1,15 @@
 package main
 
-buffer: [1024]byte
+BUFFER_SIZE :: 1024
+
+buffer: [BUFFER_SIZE]byte
 buffer_off: int
 
 @(export)
 do_string :: proc(ptr: [^]byte, size: int) -> [^]byte
 {
+  if size < 0 || size > BUFFER_SIZE - buffer_off do return nil
+
   for i := (size-1)/2; i >= 0; i -= 1
   {
     temp := ptr[size-1-i]
