@@ -17,7 +17,7 @@
 <script>
   /*
   	wasm: the wasmMemoryInterface instance (WasmMemoryInterface)
-	  odin: the wasm instance                (WebAssembly.Instance)
+	odin: the wasm instance                (WebAssembly.Instance)
   */
   import { wasm, odin, WasmMemoryInterface } from "../wasm.js"
   
