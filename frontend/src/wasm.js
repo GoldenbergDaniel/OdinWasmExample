@@ -667,6 +667,15 @@ function initWasm()
   init(imports).then((instance) => {
     odin = instance
     wasm.setExports(instance.exports)
+
+		if (odin.exports.memory) {
+			if (wasm.memory) {
+				console.warn("`initWasm` was given an interface with existing memory.");
+			}
+			
+			wasm.setMemory(odin.exports.memory);
+		}
+
     console.log("Wasm initialized successfully.")
   })
 }
